@@ -3,7 +3,7 @@ export default class Model {
 
     }
 
-    init(){
-        
+    calcPrice(value, rate) {
+        return (value / rate).toFixed(6);
     }
 }

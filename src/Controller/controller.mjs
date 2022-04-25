@@ -37,14 +37,13 @@ export default class Controller {
       )
         .then((response) => response.json())
         .then((data) => {
-          this.r = data.rates[secondCurrency];
+          this.rate = data.rates[secondCurrency];
 
           this.view.updateSellText(
-            `1 ${secondCurrency} = ${this.r} ${firstCurrency} `
+            `1 ${secondCurrency} = ${this.rate} ${firstCurrency} `
           );
           this.newPrice =
-            firstCurrency != secondCurrency ? (1 / this.r).toFixed(6) : 1;
-          console.log(this.r);
+            firstCurrency != secondCurrency ? (1 / this.rate).toFixed(6) : 1;
           this.view.updateBuyText(
             `1 ${secondCurrency} = ${this.newPrice} ${firstCurrency} `
           );
@@ -54,42 +53,47 @@ export default class Controller {
           }
           if (this.newValue && firstCurrency != secondCurrency) {
             this.view.updateInputValue(
-              (this.sellInput.value * this.newPrice).toFixed(6)
+              this.model.calcPrice(this.newValue, this.rate)
             );
-
           }
           this.sellInput = this.view.sellCurrencyInput;
           this.sellInput.addEventListener("keyup", (e) => {
             this.newValue = this.sellInput.value;
-            this.view.updateInputValue((this.newValue / this.r).toFixed(6));
+            this.view.updateInputValue(
+              this.model.calcPrice(this.newValue, this.rate)
+            );
           });
         });
     };
 
-    buyButtons.forEach((item) => {
-      if (item.classList.contains("selected")) {
-        this.b = item.innerHTML;
-        getPrice(this.b, this.a);
-      }
-      item.addEventListener("click", () => {
+    const buttonsEvent = () => {
+      buyButtons.forEach((item) => {
         if (item.classList.contains("selected")) {
-          this.b = item.innerHTML;
-          getPrice(this.b, this.a);
+          this.buyCurrency = item.innerHTML;
+          getPrice(this.buyCurrency, this.sellCurrency);
         }
+        item.addEventListener("click", () => {
+          if (item.classList.contains("selected")) {
+            this.buyCurrency = item.innerHTML;
+            getPrice(this.buyCurrency, this.sellCurrency);
+          }
+        });
       });
-    });
 
-    sellButtons.forEach((item) => {
-      if (item.classList.contains("selected")) {
-        this.a = item.innerHTML;
-        getPrice(this.b, this.a);
-      }
-      item.addEventListener("click", () => {
+      sellButtons.forEach((item) => {
         if (item.classList.contains("selected")) {
-          this.a = item.innerHTML;
-          getPrice(this.b, this.a);
+          this.sellCurrency = item.innerHTML;
+          getPrice(this.buyCurrency, this.sellCurrency);
         }
+        item.addEventListener("click", () => {
+          if (item.classList.contains("selected")) {
+            this.sellCurrency = item.innerHTML;
+            getPrice(this.buyCurrency, this.sellCurrency);
+          }
+        });
       });
-    });
+    };
+
+    buttonsEvent();
   }
 }

@@ -4,6 +4,10 @@ export default class View {
   }
 
   init() {
+    this.render();
+  }
+
+  render() {
     this.container = this.createDiv({
       class: "container",
     });
@@ -119,9 +123,9 @@ export default class View {
     });
 
     this.sellPriceText = this.createParagraph({
-      class: 'converter__sell-price',
-      text: '1 RUB = 0.0135 USD'
-    })
+      class: "converter__sell-price",
+      text: "1 RUB = 0.0135 USD",
+    });
 
     this.buyCurrencyBlock = this.createDiv({
       class: "converter__buy-currency",
@@ -167,10 +171,9 @@ export default class View {
     });
 
     this.buyPriceText = this.createParagraph({
-      class: 'converter__buy-price',
-      text: '1 USD = 73.8896 RUB'
-    })
-
+      class: "converter__buy-price",
+      text: "1 USD = 73.8896 RUB",
+    });
 
     this.container.appendChild(this.navMenu);
     this.navMenu.appendChild(this.logoBlock);
@@ -188,7 +191,6 @@ export default class View {
     this.container.appendChild(this.contentBlock);
     this.contentBlock.appendChild(this.headTitle);
     this.contentBlock.appendChild(this.converterBlock);
-
     this.converterBlock.appendChild(this.sellCurrencyBlock);
     this.sellCurrencyBlock.appendChild(this.sellCurrencyText);
     this.sellCurrencyBlock.appendChild(this.sellCurrencyButtons);
@@ -199,7 +201,6 @@ export default class View {
     this.sellCurrencyBlock.appendChild(this.sellCalcBlock);
     this.sellCalcBlock.appendChild(this.sellCurrencyInput);
     this.sellCalcBlock.appendChild(this.sellPriceText);
-
     this.converterBlock.appendChild(this.buyCurrencyBlock);
     this.buyCurrencyBlock.appendChild(this.buyCurrencyText);
     this.buyCurrencyBlock.appendChild(this.buyCurrencyButtons);
@@ -210,8 +211,6 @@ export default class View {
     this.buyCurrencyBlock.appendChild(this.buyCalcBlock);
     this.buyCalcBlock.appendChild(this.buyCurrencyInput);
     this.buyCalcBlock.appendChild(this.buyPriceText);
-
-
 
     this.root.appendChild(this.container);
   }

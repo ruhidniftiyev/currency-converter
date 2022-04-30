@@ -175,6 +175,12 @@ export default class View {
       text: "1 USD = 73.8896 RUB",
     });
 
+    this.newCurrency = this.createInput({
+      class: "newCurrency",
+      value: "",
+      type: "text",
+    });
+
     this.container.appendChild(this.navMenu);
     this.navMenu.appendChild(this.logoBlock);
     this.logoBlock.appendChild(this.logoImage);
@@ -191,6 +197,7 @@ export default class View {
     this.container.appendChild(this.contentBlock);
     this.contentBlock.appendChild(this.headTitle);
     this.contentBlock.appendChild(this.converterBlock);
+    this.contentBlock.appendChild(this.newCurrency);
     this.converterBlock.appendChild(this.sellCurrencyBlock);
     this.sellCurrencyBlock.appendChild(this.sellCurrencyText);
     this.sellCurrencyBlock.appendChild(this.sellCurrencyButtons);
@@ -198,6 +205,7 @@ export default class View {
     this.sellCurrencyButtons.appendChild(this.sellDollars);
     this.sellCurrencyButtons.appendChild(this.sellEuros);
     this.sellCurrencyButtons.appendChild(this.sellPounds);
+
     this.sellCurrencyBlock.appendChild(this.sellCalcBlock);
     this.sellCalcBlock.appendChild(this.sellCurrencyInput);
     this.sellCalcBlock.appendChild(this.sellPriceText);
@@ -208,6 +216,7 @@ export default class View {
     this.buyCurrencyButtons.appendChild(this.buyDollars);
     this.buyCurrencyButtons.appendChild(this.buyEuros);
     this.buyCurrencyButtons.appendChild(this.buyPounds);
+
     this.buyCurrencyBlock.appendChild(this.buyCalcBlock);
     this.buyCalcBlock.appendChild(this.buyCurrencyInput);
     this.buyCalcBlock.appendChild(this.buyPriceText);
@@ -303,5 +312,21 @@ export default class View {
 
   updateInputValue(price) {
     this.buyCurrencyInput.value = price;
+  }
+
+  addNewCurrency(value) {
+    const currencyButton = this.createButton({
+      class: "converter__sell-btn",
+      text: `${value}`,
+    });
+    this.sellCurrencyButtons.appendChild(currencyButton);
+  }
+
+  addNewBuyCurrency(value) {
+    const currencyBuyButton = this.createButton({
+      class: "converter__buy-btn",
+      text: `${value}`,
+    });
+    this.buyCurrencyButtons.appendChild(currencyBuyButton);
   }
 }

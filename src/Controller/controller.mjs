@@ -6,46 +6,41 @@ export default class Controller {
 
   init() {
     this.view.init();
-
-    const sellButtons = document.querySelectorAll(".converter__sell-btn");
-    sellButtons.forEach((button) => {
-      button.addEventListener("click", (e) => {
-        sellButtons.forEach((i) => {
-          if (i.classList.contains("selected")) {
-            i.classList.remove("selected");
-          }
-        });
-        button.classList.add("selected");
-      });
+    const newCurrencySellInput = document.querySelector(".newCurrency");
+    newCurrencySellInput.addEventListener("keypress", (e) => {
+      if (typeof this.obj[newCurrencySellInput.value] != 'undefined' && e.key === "Enter") {
+        console.log(newCurrencySellInput.value);
+        this.view.addNewCurrency(newCurrencySellInput.value);
+        this.view.addNewBuyCurrency(newCurrencySellInput.value);
+        newCurrencySellInput.value = "";
+        this.selectSell();
+        this.selectBuy();
+        this.renderSell();
+        this.renderBuy();
+      }
+      if(typeof this.obj[newCurrencySellInput.value] === 'undefined' && e.key === "Enter") {
+        console.log('NET TAKOY VALYUTI')
+      }
     });
 
-    const buyButtons = document.querySelectorAll(".converter__buy-btn");
-    buyButtons.forEach((button) => {
-      button.addEventListener("click", (e) => {
-        buyButtons.forEach((item) => {
-          if (item.classList.contains("selected")) {
-            item.classList.remove("selected");
-          }
-        });
-        button.classList.add("selected");
-      });
-    });
+    this.selectSell();
+    this.selectBuy();
 
-    const getPrice = (firstCurrency, secondCurrency) => {
+    this.getPrice = (firstCurrency, secondCurrency) => {
       fetch(
         `https://api.exchangerate.host/latest?base=${firstCurrency}&symbols=${secondCurrency}`
       )
         .then((response) => response.json())
         .then((data) => {
           this.rate = data.rates[secondCurrency];
-
-          this.view.updateSellText(
-            `1 ${secondCurrency} = ${this.rate} ${firstCurrency} `
-          );
           this.newPrice =
             firstCurrency != secondCurrency ? (1 / this.rate).toFixed(6) : 1;
-          this.view.updateBuyText(
+          this.view.updateSellText(
             `1 ${secondCurrency} = ${this.newPrice} ${firstCurrency} `
+          );
+
+          this.view.updateBuyText(
+            `1 ${firstCurrency} = ${this.rate} ${secondCurrency} `
           );
           this.view.updateInputValue(this.newPrice);
           if (firstCurrency === secondCurrency) {
@@ -66,34 +61,76 @@ export default class Controller {
         });
     };
 
-    const buttonsEvent = () => {
-      buyButtons.forEach((item) => {
-        if (item.classList.contains("selected")) {
-          this.buyCurrency = item.innerHTML;
-          getPrice(this.buyCurrency, this.sellCurrency);
-        }
-        item.addEventListener("click", () => {
-          if (item.classList.contains("selected")) {
-            this.buyCurrency = item.innerHTML;
-            getPrice(this.buyCurrency, this.sellCurrency);
+    this.renderSell();
+    this.renderBuy();
+    this.getObject();
+  }
+  selectSell() {
+    const sellButtons = document.querySelectorAll(".converter__sell-btn");
+    sellButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        sellButtons.forEach((i) => {
+          if (i.classList.contains("selected")) {
+            i.classList.remove("selected");
           }
         });
+        button.classList.add("selected");
       });
+    });
+  }
 
-      sellButtons.forEach((item) => {
+  selectBuy() {
+    const buyButtons = document.querySelectorAll(".converter__buy-btn");
+    buyButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        buyButtons.forEach((item) => {
+          if (item.classList.contains("selected")) {
+            item.classList.remove("selected");
+          }
+        });
+        button.classList.add("selected");
+      });
+    });
+  }
+
+  renderSell() {
+    const sellBtn = document.querySelectorAll(".converter__sell-btn");
+    sellBtn.forEach((item) => {
+      if (item.classList.contains("selected")) {
+        this.sellCurrency = item.innerHTML;
+        this.getPrice(this.buyCurrency, this.sellCurrency);
+      }
+      item.addEventListener("click", () => {
         if (item.classList.contains("selected")) {
           this.sellCurrency = item.innerHTML;
-          getPrice(this.buyCurrency, this.sellCurrency);
+          this.getPrice(this.buyCurrency, this.sellCurrency);
         }
-        item.addEventListener("click", () => {
-          if (item.classList.contains("selected")) {
-            this.sellCurrency = item.innerHTML;
-            getPrice(this.buyCurrency, this.sellCurrency);
-          }
-        });
       });
-    };
+    });
+  }
 
-    buttonsEvent();
+  renderBuy() {
+    const buyBtn = document.querySelectorAll(".converter__buy-btn");
+    buyBtn.forEach((item) => {
+      if (item.classList.contains("selected")) {
+        this.buyCurrency = item.innerHTML;
+        this.getPrice(this.buyCurrency, this.sellCurrency);
+      }
+      item.addEventListener("click", () => {
+        if (item.classList.contains("selected")) {
+          this.buyCurrency = item.innerHTML;
+          this.getPrice(this.buyCurrency, this.sellCurrency);
+        }
+      });
+    });
+  }
+
+  getObject() {
+    fetch(`https://api.exchangerate.host/latest?base=USD&symbols=`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.rates);
+        this.obj = data.rates;
+      });
   }
 }

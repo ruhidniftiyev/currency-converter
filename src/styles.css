@@ -83,6 +83,7 @@ body {
   color: black;
   border: 1px solid darkgray;
   border-radius: 3px;
+  cursor: pointer;
 }
 
 .selected {
@@ -142,6 +143,7 @@ input[type="number"]::-webkit-outer-spin-button {
   color: black;
   border: 1px solid darkgray;
   border-radius: 3px;
+  cursor: pointer;
 }
 
 .selected {
@@ -180,4 +182,21 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .converter__buy-currency {
   margin-left: 260px;
+}
+
+.newCurrency {
+  width: 80px;
+  height: 32px;
+}
+
+.converter__buy-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 350px;
+}
+
+.converter__sell-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 350px;
 }
